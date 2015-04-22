@@ -194,12 +194,9 @@ Vivamus sed nibh ac metus tristique tristique a vitae ante. Sed lobortis mi ut a
 
 \section*{Conclusions}
 
-\begin{itemize}
-\item Pellentesque eget orci eros. Fusce ultricies, tellus et pellentesque fringilla, ante massa luctus libero, quis tristique purus urna nec nibh. Phasellus fermentum rutrum elementum. Nam quis justo lectus.
-\item Vestibulum sem ante, hendrerit a gravida ac, blandit quis magna.
-\item Donec sem metus, facilisis at condimentum eget, vehicula ut massa. Morbi consequat, diam sed convallis tincidunt, arcu nunc.
-\item Nunc at convallis urna. isus ante. Pellentesque condimentum dui. Etiam sagittis purus non tellus tempor volutpat. Donec et dui non massa tristique adipiscing.
-\end{itemize}
+We present an early method for rating actors based on user reviews, which we obtained from the Internet.  This idea uses a Web scraper to get movie review data.  Then, the words in these reviews have semantic analysis conducted on them.  This allows us to see whether the word is used in good reviews, bad reviews, or both.  Conducting semantic analysis leads us to using the model generated from the analysis to rate the movies by the words in each review.  Afterwards, we can rate actors after we have a database of generated movie ratings.  This can potentially lead to a system where users review a movie in words, and not numbers.  This would allow for movies, and those who are involved with said movies, to receive number ratings that are solely dictated by the words that people use to describe the movies.  This eliminates the potential skew of number ratings for actors due to partiality or non-movie reasons, such as charity donations.
+
+
 
 \color{DarkSlateGray} % Set the color back to DarkSlateGray for the rest of the content
 
@@ -209,7 +206,16 @@ Vivamus sed nibh ac metus tristique tristique a vitae ante. Sed lobortis mi ut a
 
 \section*{Forthcoming Research}
 
-Vivamus molestie, risus tempor vehicula mattis, libero arcu volutpat purus, sed blandit sem nibh eget turpis. Maecenas rutrum dui blandit lorem vulputate gravida. Praesent venenatis mi vel lorem tempor at varius diam sagittis. Nam eu leo id turpis interdum luctus a sed augue. Nam tellus.
+Ideas for continued research include the following:
+\begin{itemize}
+\item Figuring out how to utilize occurrences of actors and actresses names in reviews to better rate them.
+\begin{itemize}
+\item This involves finding a sentence that specifically references the actor/actress and weigh that heavier than the rest of the review.
+\end{itemize}
+\item Improving the scraper to gather information from various resources, and store the relevant data from those resources.
+\item Improving the layout of the PostgreSQL database, as well as the functionality and efficiency of it.
+\item Comparing our actor ratings to other reputable sources’ actor ratings.
+\end{itemize}
 
  %----------------------------------------------------------------------------------------
 %	REFERENCES
