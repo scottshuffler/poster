@@ -50,13 +50,15 @@
 \begin{multicols}{2} % This is how many columns your poster will be broken into, a portrait poster is generally split into 2 columns
 
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+
 %----------------------------------------------------------------------------------------
 %   INTRODUCTION
 %----------------------------------------------------------------------------------------
 \section*{Introduction}
 
-There is vast amounts of unstructured text data on the Internet.  A large chunk of this data exists as user reviews. We use movie review data to try to derive actor ratings from the movies that those actors were a part of.  This project utilizes labeled movie reviews obtained through user input to compute semantic analysis on the words associated with each movie review.  This allows us to use data in order to learn about the movie reviews, and determine how each word used in the review affects the overall review of each movie.  We can use these words, and compute semantic analysis to translate the individual reviews into whether the movie was a good movie, or a bad movie.  This idea can be transformed to work on other datasets of various subjects.  Then, the word analysis and generated movie reviews can be used to construct a model that can be used to rate actors based on the words associated in the actors’ reviews. An overview of our systems architecture is shown in Figure 1. 
+There is vast amounts of unstructured text data on the Internet.  A large chunk of this data exists as user reviews. We use movie review data to try to derive actor ratings from the movies that those actors were a part of.  This project utilizes labeled movie reviews obtained through user input and performs sentiment analysis on the words associated with each movie review.  This allows us to use data in order to learn about the movie reviews, and determine how each word used in the review affects the overall review of each movie.  We can use these words, and use sentiment analysis to determine if a review is positive, negative, or neutral.  This idea can be transformed to work on other datasets of various subjects.  Then, we examine the the overall user sentiment about a movie to rate the actors and actresses that appear in those movies. 
 
+An overview of our system's architecture is shown in Figure 1. We first obtain user generated data from the Internet and store it in a database. We then take each unclassified review, preprocess the data, and classify the review as either positive, negative, or neutral. We then attempt to find to references to specific cast members in the review, and classify this sentence as positive, negative, or neutral, as above. We then store this information back into the database. 
 
 %----------------------------------------------------------------------------------------
 %   OBJECTIVES
@@ -64,28 +66,27 @@ There is vast amounts of unstructured text data on the Internet.  A large chunk 
 \section*{Main Objectives}
 
 \begin{enumerate}
-\item We want to use users’ movie reviews in order to analyze them.
+\item Analyze user's movie reviews to determine the sentiment of the review. 
 \item Using this data, we can learn about movie reviews and how they are structured.
-\item By computing semantic analysis on movie reviews, we can determine if a movie was good or bad.
-\item We want to generate a model that can be used to rate an actor as good or bad.
-\item Rating an actor would be based solely off of reviews of movies that he/she was in.
+\item By predicting the sentiment of the reviews for a movie, we can determine if a movie was good or bad.
+\item Generate a model that can be used to infer rankings for actors and actresses, based on the impact they have on a movie.
+\item Rate actors and actresses based off of reviews of movies that they were in.
 \end{enumerate}
 
 %----------------------------------------------------------------------------------------
 %	DATA AQUISITION
 %----------------------------------------------------------------------------------------
-
 \section*{Data Acquisition}
 
-In order to retrieve the data that we need to do this research, we decided to use a premade dataset in order to have ready-to-use data to start with.  We have also implemented a Web scraper in order to retrieve our own data for use at a later date.  This data is stored into a PostgreSQL database, which was created from scratch.  We were able to use the Web scraper to scan a series of Web pages, and then get movie review data.  Afterwards, we were able to merge the concepts of a Web scraper and the concepts of a PostgreSQL database in order to store scraped data into that database.
+In order to retrieve the data that we need for this research, we decided to use a premade dataset in order to have ready-to-use data to start with.  We have implemented a Web scraper in order to retrieve our own data which can be used to continuously update the model and the rankings we derive. We were able to use the Web scraper to scan a series of Web pages, and then get movie review data. We store this data in a PostgreSQL database, which associates movies with the actors that starred in them and their reviews.
 
-%------------------------------------------------
-
+%----------------------------------------------------------------------------------------
+%   SENTIMENT ANALYSIS
+%----------------------------------------------------------------------------------------
 \section*{Sentiment Analysis}
 
 The Naive Bayes Classifier is a simple classifier that has used to moderate success in document classification \cite{hand_idiots_2001, mccallum_comparison_1998}. We train our model using Stanfords Large Movie Review Dataset \cite{maas_learning_2011}. An overview of the system is shown in Figure 2.
-\newline
-\newline
+
 Beginning with a dataset of labeled documents, which in this case are movie reviews labeled as either positive, negative, or neutral, we preprocess each review to make the data more uniform, and to remove useless information \cite{bird_natural_2009}. The preprocessing steps we take are summarized below:
 \newline
 \begin{itemize}
@@ -106,6 +107,7 @@ C_{map} = argmax_{c\in C} (P(c|d)) = argmax_{c\in C}[P(c)\Pi P(t_k |c)]
 \end{eqnarray}
 where \(t_k\) are the tokens in the document, \(P(c|d)\) is the probability of class given the document, \(P(c)\) is the prior probability of class \(c\), and \(P(t_k|c)\) is the probability of tokens, given class \(c\). We calculate these probabilities using the labeled dataset. 
 \leavevmode
+Once the model is trained in this way, we can being to classify incoming documents which we do not know the label for. A class is assigned to a review in the above manner, which is maximizing the product of the probabilities of the tokens occurring, times the prior probability of the class occurring.  
 \newline
 
 %----------------------------------------------------------------------------------------
@@ -113,28 +115,27 @@ where \(t_k\) are the tokens in the document, \(P(c|d)\) is the probability of c
 %----------------------------------------------------------------------------------------
 \section*{Conclusions}
 
-We present an early method for rating actors based on user reviews, which we obtained from the Internet. This idea uses a Web scraper to get movie review data.  Then, the words in these reviews have semantic analysis conducted on them.  This allows us to see whether the word is used in good reviews, bad reviews, or both.  Conducting semantic analysis leads us to using the model generated from the analysis to rate the movies by the words in each review.  Afterwards, we can rate actors after we have a database of generated movie ratings.  This can potentially lead to a system where users review a movie in words, and not numbers.  This would allow for movies, and those who are involved with said movies, to receive number ratings that are solely dictated by the words that people use to describe the movies.  This eliminates the potential skew of number ratings for actors due to partiality or non-movie reasons, such as charity donations.
+We present an early method for rating actors based on user reviews, which we obtained from the Internet. This idea uses a Web scraper to get movie review data.  Then, the words in these reviews have sentiment analysis conducted on them.  This allows us to see whether the word is used in good reviews, bad reviews, or both.  Conducting sentiment analysis leads us to using the model generated from the analysis to rate the movies by the words in each review.  Afterwards, we can rate actors after we have a database of generated movie ratings.  This can potentially lead to a system where users review a movie in words, and not numbers.  This would allow for movies, and those who are involved with said movies, to receive number ratings that are solely dictated by the words that people use to describe the movies.  This eliminates the potential skew of number ratings for actors due to partiality or non-movie reasons, such as charity donations.
+
 
 %----------------------------------------------------------------------------------------
-%   END CONCLUSIONS
+%   FIGURES
 %----------------------------------------------------------------------------------------
-
 \begin{center}\vspace{1cm}
 \includegraphics[width=0.8\linewidth]{flow2}
-\captionof{figure}{\color{Green} Overall System Flow}
+\captionof{figure}{\color{DarkSlateGray} Overall System Flow}
 \end{center}\vspace{1cm}
 
 
 \begin{center}\vspace{1cm}
 \includegraphics[width=0.8\linewidth]{sentiment}
-\captionof{figure}{\color{Green} Sentiment Analysis}
+\captionof{figure}{\color{DarkSlateGray} Sentiment Analysis}
 \end{center}\vspace{1cm}
 
 
 %----------------------------------------------------------------------------------------
-%	FORTHCOMING RESEARCH
+%	FUTURE WORK
 %----------------------------------------------------------------------------------------
-
 \section*{Future Work}
 
 Ideas for continued research include the following:
@@ -145,10 +146,10 @@ Ideas for continued research include the following:
 \end{itemize}
 \item Improving the scraper to gather information from various resources, and store the relevant data from those resources.
 \item Improving the layout of the PostgreSQL database, as well as the functionality and efficiency of it.
-\item Comparing our actor ratings to other reputable sources’ actor ratings.
+\item Comparing our actor ratings to other reputable source's actor ratings.
 \end{itemize}
 
- %----------------------------------------------------------------------------------------
+%----------------------------------------------------------------------------------------
 %	REFERENCES
 %----------------------------------------------------------------------------------------
 \bibliographystyle{ieeetr} % Plain referencing style
@@ -157,7 +158,6 @@ Ideas for continued research include the following:
 %----------------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
 %----------------------------------------------------------------------------------------
-
 \section*{Acknowledgements}
 
 Appalachian State S-STEM Program\newline
